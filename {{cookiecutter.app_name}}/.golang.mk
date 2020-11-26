@@ -2,7 +2,7 @@ MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 CURRENT_DIR := $(notdir $(patsubst %/,%,$(dir $(MAKEFILE_PATH))))
 
 # Go related variables
-GOPATH := $(CURDIR)/.go
+GOPATH ?= $(CURDIR)/.go
 GOBIN := $(GOPATH)/bin
 GO := GOPATH=$(GOPATH) go
 GOFMT := GOPATH=$(GOPATH) gofmt

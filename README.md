@@ -41,6 +41,12 @@ Targets:
   lines-default         shorten lines longer than 100 chars, ignore generated
 ```
 
+Example using default GOPATH rather than the project specific one ./.go/ targets for downloading the tools and running all the common tasks:
+
+```console
+$ GOPATH=~/go make tools all
+```
+
 ## Assumptions
 
 - Generated project will be configuration managed by git
