@@ -1,0 +1,9 @@
+{
+    "app_server_host": "github.com",
+    "app_namespace": "acme",
+    "app_name": "go-project",
+    "app_short_description": "Acme's golang project ...",
+    "app_registry": "github.com",
+    "golang_version": "1.15",
+    "docker_base": "scratch"
+}

@@ -1,0 +1,18 @@
+.go-cache:
+  variables:
+    GOPATH: $CI_PROJECT_DIR/.go
+  before_script:
+    - mkdir -p .go
+  cache:
+    paths:
+      - .go/pkg/mod/
+
+test:
+  image: golang:{{cookiecutter.golang_version}}
+  extends: .go-cache
+  before_script:
+    - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.32.2
+    - make tools
+    - export PATH=$(go env GOPATH)/bin:$PATH
+  script:
+    - make
