@@ -75,8 +75,10 @@ generate-default: ## go generate code
 .PHONY: tools-default
 tools-default: ## install the project specific tools
 tools-default:
-	cat tools.go | grep _ | awk -F'"' '{print $$2}' | xargs -tI % $(GO) install %
-	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(GOPATH)/bin $(GOLANGCI_LINT_VERSION)
+	@echo ">>> install from tools.go "
+	@cat tools.go | grep _ | awk -F'"' '{print $$2}' | xargs -tI % sh -c '$(GO) install %'
+	@echo ">>> install golangci-lint "
+	@curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(GOPATH)/bin $(GOLANGCI_LINT_VERSION)
 
 	
 .PHONY: runner-default
