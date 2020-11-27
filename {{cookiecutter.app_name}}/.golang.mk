@@ -5,10 +5,8 @@ CURRENT_DIR := $(notdir $(patsubst %/,%,$(dir $(MAKEFILE_PATH))))
 GOPATH ?= $(CURDIR)/.go
 GOBIN := $(GOPATH)/bin
 GO := GOPATH=$(GOPATH) go
-GOFMT := GOPATH=$(GOPATH) gofmt
-GOIMPORTS := GOPATH=$(GOPATH) goimports
+GOFMT := $(GO) fmt
 GOMODULE := $(shell $(GO) list)
-GOSRC := $(shell find . -type f -name "*.go" -not -path "./vendor/*" -not -path "./.go/*" -not -path "*/mocks/*") # used when tools are not vendor aware
 
 LD_VERSION = x.x.x
 LD_COMMIT = 001
@@ -47,10 +45,9 @@ coverage-default: test
 	@$(GOBIN)/goverreport -coverprofile=cover.out -sort=block -order=desc -threshold=85
 
 .PHONY: fmt-default
-fmt-default: ## organise import and format the code
-	@echo ">>> goimports && gofmt" # dont show real command as src could be huge
-	@$(GOIMPORTS) -w $(GOSRC)
-	@$(GOFMT) -s -w $(GOSRC)
+fmt-default: ## format the code
+	@echo ">>> gofmt"
+	@$(GOFMT) ./...
 
 .PHONY: mod-default
 mod-default: ## makes sure go.mod matches the source code in the module

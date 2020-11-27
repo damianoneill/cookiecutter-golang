@@ -27,7 +27,7 @@ Targets:
   build-default         build the binary, ignoring vendored code if it exists
   test-default          run test with coverage
   coverage-default      report on test coverage
-  fmt-default           organise import and format the code
+  fmt-default           format the code
   mod-default           makes sure go.mod matches the source code in the module
   archive-default       archive the third party dependencies, typically prior to generating a tagged release
   lint-default          run golangci-lint using the configuration in .golangci.yml
@@ -41,7 +41,9 @@ Targets:
   lines-default         shorten lines longer than 100 chars, ignore generated
 ```
 
-Example using default GOPATH rather than the project specific one ./.go/ targets for downloading the tools and running all the common tasks:
+Example using default GOPATH rather than the project specific one stored in .go/
+
+Example shows targets for downloading the necessary tools and the common build all target.
 
 ```console
 $ GOPATH=~/go make tools all

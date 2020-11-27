@@ -10,5 +10,4 @@ import (
 	_ "github.com/securego/gosec/cmd/gosec"
 	_ "github.com/segmentio/golines"
 	_ "github.com/spf13/cobra/cobra"
-	_ "golang.org/x/tools/cmd/goimports"
 )
