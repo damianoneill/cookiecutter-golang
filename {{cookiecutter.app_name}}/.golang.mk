@@ -115,10 +115,10 @@ lines-default:
 authors-default: ## update the AUTHORS file
 authors-default:
 	@echo ">>> authors "
-	@git log --all --format='%aN <%aE>' | sort -u | egrep -v noreply | egrep -v "<>" > AUTHORS
+	@git log --all --format='%aN <%aE>' | sort -u | egrep -v noreply > AUTHORS
 
 .PHONY: changelog-default
-changelog-default: ## generate CHANGELOG.md
+changelog-default: ## update the CHANGELOG.md
 changelog-default:
 	@echo ">>> changelog "
 	@$(GOBIN)/git-chglog -o CHANGELOG.md

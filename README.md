@@ -5,9 +5,10 @@ Powered by [Cookiecutter](https://github.com/audreyr/cookiecutter)
 ## Features
 
 - Generates
-    - Makefile
-    - go.mod/go.sum
-    - tools.go
+    - Makefile -- can be used to add project specific targets or to override/extend common targets
+        - golang.mk -- contains common go targets
+    - go.mod
+    - tools.go -- contains go tools used by this project, can be generated using `make tools`.
     - cobra/viper based mainline
         - cobra completion command
         - cobra version command
@@ -39,11 +40,13 @@ Targets:
   security-default      run go security check
   outdated-default      check for outdated direct dependencies
   lines-default         shorten lines longer than 100 chars, ignore generated
+  authors-default       update the AUTHORS file
+  changelog-default     update the CHANGELOG.md
 ```
 
-Example using default GOPATH rather than the project specific one stored in .go/
+See below for an example using default GOPATH rather than the project specific one stored in .go/
 
-Example shows targets for downloading the necessary tools and the common build all target.
+The example shows targets for downloading the necessary tools and the common build `all` target.
 
 ```console
 $ GOPATH=~/go make tools all
