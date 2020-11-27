@@ -111,6 +111,18 @@ lines-default:
 	@echo ">>> golines "
 	@$(GOBIN)/golines --ignore-generated -m 100 -w .
 
+.PHONY: authors-default
+authors-default: ## update the AUTHORS file
+authors-default:
+	@echo ">>> authors "
+	@git log --all --format='%aN <%aE>' | sort -u | egrep -v noreply | egrep -v "<>" > AUTHORS
+
+.PHONY: changelog-default
+changelog-default: ## generate CHANGELOG.md
+changelog-default:
+	@echo ">>> changelog "
+	@$(GOBIN)/git-chglog -o CHANGELOG.md
+
 .PHONY: help-default
 help-default:
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m ignore suffix -default e.g. make install \n\nTargets:\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST)

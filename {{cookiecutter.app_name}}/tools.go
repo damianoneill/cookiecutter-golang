@@ -3,6 +3,7 @@
 package main
 
 import (
+	_ "github.com/git-chglog/git-chglog/cmd/git-chglog"
 	_ "github.com/goreleaser/goreleaser"
 	_ "github.com/mcubik/goverreport"
 	_ "github.com/mitchellh/golicense"
