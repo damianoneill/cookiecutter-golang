@@ -1,11 +1,14 @@
 repos:
--   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.3.0
-    hooks:
-    -   id: check-yaml
-    -   id: end-of-file-fixer
-    -   id: trailing-whitespace
-- repo: git://github.com/smian/pre-commit-makefile
-  sha: master
+- repo: git://github.com/johncblandii/pre-commit-makefile
+  rev: master
   hooks:
     - id: makefile-doc
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v2.3.0
+  hooks:
+  -   id: end-of-file-fixer
+  -   id: trailing-whitespace
+# -   repo: git://github.com/igorshubovych/markdownlint-cli
+#     rev: v0.26.0
+#     hooks:
+#     -   id: markdownlint
