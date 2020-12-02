@@ -4,7 +4,7 @@ CURRENT_DIR := $(notdir $(patsubst %/,%,$(dir $(MAKEFILE_PATH))))
 # Go related variables
 GOBIN := $(CURDIR)/.go/bin
 GO := go
-GOFMT := $(GO) fmt
+GOFMT := gofumpt -w -s
 GOMODULE := $(shell $(GO) list)
 
 LD_VERSION = x.x.x
@@ -46,7 +46,7 @@ coverage-default: test
 .PHONY: fmt-default
 fmt-default: ## format the code
 	@echo ">>> gofmt"
-	@$(GOFMT) ./...
+	@$(GOFMT) .
 
 .PHONY: mod-default
 mod-default: ## makes sure go.mod matches the source code in the module
