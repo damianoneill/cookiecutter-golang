@@ -12,7 +12,7 @@ LD_COMMIT = 001
 ifeq ($(shell git rev-parse --is-inside-work-tree 2>/dev/null),true)
 LD_VERSION = $(shell git describe --tags --abbrev=0 --dirty=-next 2>/dev/null)
 LD_COMMIT = $(shell git rev-parse HEAD)
-endif 
+endif
 LD_DATE := $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 LD_FLAGS := -s -w -X $(GOMODULE)/cmd.version=$(LD_VERSION) -X $(GOMODULE)/cmd.commit=$(LD_COMMIT) -X $(GOMODULE)/cmd.date=$(LD_DATE)
 
@@ -31,7 +31,7 @@ install-default: ## install the binary
 build-default: ## build the binary, ignoring vendored code if it exists
 	@echo ">>> go build "
 	@$(GO) build -ldflags="$(LD_FLAGS)" ./...
-        
+
 .PHONY: test-default
 test-default: ## run test with coverage
 	@echo ">>> go test "
@@ -39,7 +39,7 @@ test-default: ## run test with coverage
 
 .PHONY: coverage-default
 coverage-default: ## report on test coverage
-coverage-default: test 
+coverage-default: test
 	@echo ">>> govereport "
 	@$(GOBIN)/goverreport -coverprofile=cover.out -sort=block -order=desc -threshold=85
 
@@ -67,7 +67,7 @@ lint-default: ## run golangci-lint using the configuration in .golangci.yml
 generate-default: ## go generate code
 	@echo ">>> go generate "
 	@$(GO) generate ./...
-	
+
 .PHONY: tools-default
 tools-default: ## install the project specific tools
 tools-default:
@@ -76,7 +76,7 @@ tools-default:
 	@echo ">>> install golangci-lint "
 	@curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(GOBIN) $(GOLANGCI_LINT_VERSION)
 
-	
+
 .PHONY: runner-default
 runner-default: ## execute the gitlab runner using the configuration in .gitlab-ci.yml
 	gitlab-runner exec docker --cache-dir /cache --docker-volumes 'cache:/cache' test

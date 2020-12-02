@@ -17,7 +17,7 @@
 # Exclude the Goland configuration directory
 .idea
 
-# Exclude the coverage generated file 
+# Exclude the coverage generated file
 cover.out
 
 # Exclude the goreleaser artefacts directory

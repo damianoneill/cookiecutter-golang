@@ -20,11 +20,11 @@ var completionCmd = &cobra.Command{
 	for convenience, and the command may need superuser rights, e.g.:
 
 		sudo ` + rootCmd.Use + ` completion
-	
+
 	Add ` + "`--completionfile=/path/to/file`" + ` flag to set alternative
 	file-path and name.
 
-	For e.g. on OSX with bash completion installed with brew you should 
+	For e.g. on OSX with bash completion installed with brew you should
 
 	` + rootCmd.Use + ` completion --completionfile /etc/bash_completion.d/` + rootCmd.Use + `.sh
 
@@ -36,9 +36,9 @@ var completionCmd = &cobra.Command{
 	or just source them directly:
 
 		. /etc/bash_completion
-		
+
 	or using if using brew
-	
+
 		. $(brew --prefix)/etc/bash_completion`,
 
 	Run: Completion,
