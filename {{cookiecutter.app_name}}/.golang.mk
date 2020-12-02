@@ -2,9 +2,8 @@ MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 CURRENT_DIR := $(notdir $(patsubst %/,%,$(dir $(MAKEFILE_PATH))))
 
 # Go related variables
-GOPATH ?= $(CURDIR)/.go
-GOBIN := $(GOPATH)/bin
-GO := GOPATH=$(GOPATH) go
+GOBIN := $(CURDIR)/.go/bin
+GO := go
 GOFMT := $(GO) fmt
 GOMODULE := $(shell $(GO) list)
 
@@ -73,9 +72,9 @@ generate-default: ## go generate code
 tools-default: ## install the project specific tools
 tools-default:
 	@echo ">>> install from tools.go "
-	@cat tools.go | grep _ | awk -F'"' '{print $$2}' | xargs -tI % sh -c '$(GO) install %'
+	@cat tools.go | grep _ | awk -F'"' '{print $$2}' | xargs -tI % sh -c 'GOBIN=$(GOBIN) $(GO) install %'
 	@echo ">>> install golangci-lint "
-	@curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(GOPATH)/bin $(GOLANGCI_LINT_VERSION)
+	@curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(GOBIN) $(GOLANGCI_LINT_VERSION)
 
 	
 .PHONY: runner-default
@@ -115,7 +114,7 @@ lines-default:
 authors-default: ## update the AUTHORS file
 authors-default:
 	@echo ">>> authors "
-	@git log --all --format='%aN <%aE>' | sort -u | egrep -v noreply > AUTHORS
+	@git log --all --format='%aN <%aE>' | sort -u | egrep -v noreply | egrep -v "<>" > AUTHORS
 
 .PHONY: changelog-default
 changelog-default: ## update the CHANGELOG.md
