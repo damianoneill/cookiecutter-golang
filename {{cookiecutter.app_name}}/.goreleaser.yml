@@ -21,7 +21,7 @@ dockers:
    image_templates:
      - "{{cookiecutter.app_registry}}/{{cookiecutter.app_namespace}}/{{cookiecutter.app_name}}:latest"
      - "{{cookiecutter.app_registry}}/{{cookiecutter.app_namespace}}/{{cookiecutter.app_name}}:{{ '{{' }} .Tag {{ '}}' }}"
-   dockerfile: Dockerfile
+   dockerfile: Dockerfile.go
 archives:
   - replacements:
       amd64: x86_64

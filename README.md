@@ -14,8 +14,9 @@ Powered by [Cookiecutter](https://github.com/audreyr/cookiecutter)
         - cobra version command
     - goreleaser config
     - gitlab-ci config
+    - pre-commit support
 
-See below for the features of the makefile
+See below for the available targets of the makefile
 
 ```console
 $ make help
@@ -42,14 +43,6 @@ Targets:
   lines-default         shorten lines longer than 100 chars, ignore generated
   authors-default       update the AUTHORS file
   changelog-default     update the CHANGELOG.md
-```
-
-See below for an example using default GOPATH rather than the project specific one stored in .go/
-
-The example shows targets for downloading the necessary tools and the common build `all` target.
-
-```console
-$ GOPATH=~/go make tools all
 ```
 
 ## Assumptions
