@@ -9,24 +9,18 @@ This project uses the following tools:
 - Go {{cookiecutter.golang_version}}
 - Docker
 
-Ensure before starting that you have installed the above and that you then run
+Ensure before starting that you have installed the above commands and that you then run
 the following commands in the project directory. Its assumed that the project
-has been:
+has been setup with git for e.g. :
 
 ```console
 git init . && git add . && git commit -m 'initial project skeleton' .
 ```
 
-Run
+To configure pre-commit, you need to install the dependencies.
 
 ```console
-make tools
-```
-
-And finally
-
-```console
-pre-commit install && pre-commit run --all-files
+pre-commit install
 ```
 
 ## Build

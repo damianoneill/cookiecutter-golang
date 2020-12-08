@@ -1,12 +1,20 @@
+# Check for required command tools to build or stop immediately
+EXECUTABLES = git go find pwd curl awk pre-commit docker
+K := $(foreach exec,$(EXECUTABLES),\
+        $(if $(shell which $(exec)),some string,$(error "No $(exec) in PATH")))
+		
 MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 CURRENT_DIR := $(notdir $(patsubst %/,%,$(dir $(MAKEFILE_PATH))))
 
 # Go related variables
 GOBIN := $(CURDIR)/.go/bin
-GO := go
+CGO_ENABLED ?= 0 # disabled, override as env variable
+GO := CGO_ENABLED=$(CGO_ENABLED) go
 GOFMT := gofumpt -w -s
 GOMODULE := $(shell $(GO) list)
+GOTOOLS := $(shell cat tools.go | grep _ | awk -F'"' '{print $2}' | sed "s/.*\///" | sed -e 's/^"//' -e 's/"$$//' | awk '{print "$(GOBIN)/" $$0}')
 
+# variables passed to binary
 LD_VERSION = x.x.x
 LD_COMMIT = 001
 ifeq ($(shell git rev-parse --is-inside-work-tree 2>/dev/null),true)
@@ -16,11 +24,20 @@ endif
 LD_DATE := $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 LD_FLAGS := -s -w -X $(GOMODULE)/cmd.version=$(LD_VERSION) -X $(GOMODULE)/cmd.commit=$(LD_COMMIT) -X $(GOMODULE)/cmd.date=$(LD_DATE)
 
-
 # third party versions
 GOLANGCI_LINT_VERSION := v1.32.2
 
-all: mod generate fmt test lint install
+.DEFAULT_GOAL := all
+
+.PHONY: all-default
+all-default: ## run the tools mod, generate, fmt, test, lint and install targets
+all-default: tools mod generate fmt test lint install
+
+.PHONY: release-default
+release-default: ## generate release
+release-default: 
+	@echo ">>> goreleaser "
+	@$(GOBIN)/goreleaser release --rm-dist
 
 .PHONY: install-default
 install-default: ## install the binary
@@ -68,11 +85,14 @@ generate-default: ## go generate code
 	@echo ">>> go generate "
 	@$(GO) generate ./...
 
-.PHONY: tools-default
-tools-default: ## install the project specific tools
-tools-default:
+tools-default: ## install the project specific tools into $GOBIN
+tools-default: $(GOBIN)/golangci-lint $(GOTOOLS)
+
+$(GOTOOLS):
 	@echo ">>> install from tools.go "
 	@cat tools.go | grep _ | awk -F'"' '{print $$2}' | xargs -tI % sh -c 'GOBIN=$(GOBIN) $(GO) install %'
+
+$(GOBIN)/golangci-lint:
 	@echo ">>> install golangci-lint "
 	@curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(GOBIN) $(GOLANGCI_LINT_VERSION)
 
