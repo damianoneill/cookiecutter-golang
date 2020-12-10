@@ -10,7 +10,8 @@ CURRENT_DIR := $(notdir $(patsubst %/,%,$(dir $(MAKEFILE_PATH))))
 GOBIN := $(CURDIR)/.go/bin
 CGO_ENABLED ?= 0 # disabled, override as env variable
 GO := CGO_ENABLED=$(CGO_ENABLED) go
-GOFMT := gofumpt -w -s
+GOPATH ?= $(shell $(GO) env GOPATH)
+GOFMT := $(GOBIN)/gofumpt -w -s
 GOMODULE := $(shell $(GO) list)
 GOTOOLS := $(shell cat tools.go | grep _ | awk -F'"' '{print $2}' | sed "s/.*\///" | sed -e 's/^"//' -e 's/"$$//' | awk '{print "$(GOBIN)/" $$0}')
 
