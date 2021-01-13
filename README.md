@@ -14,7 +14,6 @@ Powered by [Cookiecutter](https://github.com/audreyr/cookiecutter)
         - cobra version command
     - goreleaser config
     - gitlab-ci config
-    - pre-commit support
 
 See below for the available targets of the makefile
 

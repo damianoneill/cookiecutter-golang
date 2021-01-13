@@ -5,7 +5,6 @@
 This project uses the following tools:
 
 - Make
-- [pre-commit.com](https://pre-commit.com/)
 - Go {{cookiecutter.golang_version}}
 - Docker
 
@@ -16,13 +15,6 @@ has been setup with git for e.g. :
 ```console
 git init . && git add . && git commit -m 'initial project skeleton' .
 ```
-
-To configure pre-commit, you need to install the dependencies.
-
-```console
-pre-commit install
-```
-
 ## Build
 
 The following make targets are available with this project.

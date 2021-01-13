@@ -1,5 +1,5 @@
 # Check for required command tools to build or stop immediately
-EXECUTABLES ?= git go find pwd curl awk pre-commit docker
+EXECUTABLES ?= git go find pwd curl awk docker
 K := $(foreach exec,$(EXECUTABLES),\
         $(if $(shell which $(exec)),some string,$(error "No $(exec) in PATH")))
 		
