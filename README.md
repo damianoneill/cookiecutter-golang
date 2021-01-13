@@ -36,7 +36,7 @@ Targets:
   tools-default         install the project specific tools
   runner-default        execute the gitlab runner using the configuration in .gitlab-ci.yml
   snapshot-default      generate a snapshot release using goreleaser
-  licenses-default      print list of licenses for third party software used in binary, if using repeatedly, use GITHUB_TOKEN
+  licenses-default      print list of licenses for third party software used in binary
   security-default      run go security check
   outdated-default      check for outdated direct dependencies
   lines-default         shorten lines longer than 100 chars, ignore generated

@@ -108,7 +108,7 @@ snapshot-default: ## generate a snapshot release using goreleaser
 	@$(GOBIN)/goreleaser --snapshot --rm-dist
 
 .PHONY: licenses-default
-licenses-default: ## print list of licenses for third party software used in binary, if using repeatedly, use GITHUB_TOKEN
+licenses-default: ## print list of licenses for third party software used in binary
 licenses-default: install
 	@echo ">>> lichen "
 	@$(GOBIN)/lichen --config=lichen.yaml $(GOPATH)/bin/$(CURRENT_DIR)
