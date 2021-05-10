@@ -3,6 +3,6 @@
     "app_namespace": "acme",
     "app_name": "go-project",
     "app_registry": "github.com",
-    "golang_version": "1.15",
+    "golang_version": "1.16",
     "docker_base": "scratch"
 }

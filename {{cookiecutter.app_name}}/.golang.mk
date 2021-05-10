@@ -8,6 +8,7 @@ CURRENT_DIR := $(notdir $(patsubst %/,%,$(dir $(MAKEFILE_PATH))))
 
 # Go related variables
 GOBIN := $(CURDIR)/.go/bin
+export PATH = $(GOBIN):$(PATH)
 CGO_ENABLED ?= 0 # disabled, override as env variable
 GO := CGO_ENABLED=$(CGO_ENABLED) go
 GOPATH ?= $(shell $(GO) env GOPATH)
