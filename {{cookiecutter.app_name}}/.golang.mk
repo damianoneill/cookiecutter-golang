@@ -1,5 +1,5 @@
 # Check for required command tools to build or stop immediately
-EXECUTABLES ?= git go find pwd curl awk docker
+EXECUTABLES ?= git go find xargs pwd curl awk docker
 K := $(foreach exec,$(EXECUTABLES),\
         $(if $(shell which $(exec)),some string,$(error "No $(exec) in PATH")))
 		
@@ -8,7 +8,7 @@ CURRENT_DIR := $(notdir $(patsubst %/,%,$(dir $(MAKEFILE_PATH))))
 
 # Go related variables
 GOBIN := $(CURDIR)/.go/bin
-export PATH = $(GOBIN):$(PATH)
+export PATH := $(GOBIN):$(PATH)
 CGO_ENABLED ?= 0 # disabled, override as env variable
 GO := CGO_ENABLED=$(CGO_ENABLED) go
 GOPATH ?= $(shell $(GO) env GOPATH)
@@ -113,6 +113,12 @@ licenses-default: ## print list of licenses for third party software used in bin
 licenses-default: install
 	@echo ">>> lichen "
 	@$(GOBIN)/lichen --config=lichen.yaml $(GOPATH)/bin/$(CURRENT_DIR)
+
+.PHONY: add-license-default
+add-license-default: ## add copyright license headers to go source code
+add-license-default:
+	@echo ">>> addlicense "
+	find . -type f -name "*.go" | xargs $(GOBIN)/addlicense -c "acme ltd" -l "apache" -y "2021"
 
 .PHONY: security-default
 security-default: ## run go security check

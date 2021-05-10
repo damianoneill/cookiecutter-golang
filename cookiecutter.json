@@ -4,5 +4,8 @@
     "app_name": "go-project",
     "app_registry": "github.com",
     "golang_version": "1.16",
-    "docker_base": "scratch"
+    "docker_base": "scratch",
+    "copyright_holder": "acme ltd",
+    "copyright_year": "2021",
+    "license_type": "apache"
 }
