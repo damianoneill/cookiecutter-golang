@@ -1,9 +1,10 @@
 # Check for required command tools to build or stop immediately
-EXECUTABLES ?= git go find xargs pwd curl awk docker
+EXECUTABLES ?= git go find xargs pwd curl awk docker wget grep sed
 K := $(foreach exec,$(EXECUTABLES),\
         $(if $(shell which $(exec)),some string,$(error "No $(exec) in PATH")))
 		
 MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
+ABS_CURRENT_DIR := $(dir $(MAKEFILE_PATH))
 CURRENT_DIR := $(notdir $(patsubst %/,%,$(dir $(MAKEFILE_PATH))))
 
 # Go related variables
@@ -15,6 +16,7 @@ GOPATH ?= $(shell $(GO) env GOPATH)
 GOFMT := $(GOBIN)/gofumpt -w -s
 GOMODULE := $(shell $(GO) list)
 GOTOOLS := $(shell cat tools.go | grep _ | awk -F'"' '{print $2}' | sed "s/.*\///" | sed -e 's/^"//' -e 's/"$$//' | awk '{print "$(GOBIN)/" $$0}')
+{% raw %} BINARY=$(shell go list -f '{{.Target}}') {% endraw %}
 
 # variables passed to binary
 LD_VERSION = x.x.x
@@ -28,6 +30,8 @@ LD_FLAGS := -s -w -X $(GOMODULE)/cmd.version=$(LD_VERSION) -X $(GOMODULE)/cmd.co
 
 # third party versions
 GOLANGCI_LINT_VERSION := v1.32.2
+TRIVY_VERSION=$(shell wget -qO - "https://api.github.com/repos/aquasecurity/trivy/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
+
 
 .DEFAULT_GOAL := all
 
@@ -88,7 +92,7 @@ generate-default: ## go generate code
 	@$(GO) generate ./...
 
 tools-default: ## install the project specific tools into $GOBIN
-tools-default: $(GOBIN)/golangci-lint $(GOTOOLS)
+tools-default: mod $(GOBIN)/golangci-lint $(GOBIN)/trivy $(GOTOOLS)
 
 $(GOTOOLS):
 	@echo ">>> install from tools.go "
@@ -98,6 +102,16 @@ $(GOBIN)/golangci-lint:
 	@echo ">>> install golangci-lint "
 	@curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(GOBIN) $(GOLANGCI_LINT_VERSION)
 
+$(GOBIN)/trivy:
+	@echo ">>> install trivy, be patient "
+	@mkdir -p $(GOPATH)/src/github.com/aquasecurity
+	@cd $(GOPATH)/src/github.com/aquasecurity ; \
+	rm -rf trivy ; \
+	git clone --depth 1 --branch v$(TRIVY_VERSION) https://github.com/aquasecurity/trivy 2>/dev/null; \
+	cd trivy/cmd/trivy/ ; \
+	export GO111MODULE=on ; \
+	GOBIN=$(GOBIN) $(GO) install ; \
+	cd $(ABS_CURRENT_DIR)
 
 .PHONY: runner-default
 runner-default: ## execute the gitlab runner using the configuration in .gitlab-ci.yml
@@ -125,6 +139,12 @@ security-default: ## run go security check
 security-default:
 	@echo ">>> gosec "
 	@$(GOBIN)/gosec -conf .gosec.json ./...
+
+.PHONY: scanner-default
+scanner-default: ## run go vulnerability scanner
+scanner-default: install-default
+	@echo ">>> trivy "
+	$(GOBIN)/trivy fs --vuln-type library $(BINARY)
 
 .PHONY: outdated-default
 outdated-default: ## check for outdated direct dependencies
