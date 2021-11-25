@@ -16,9 +16,7 @@ builds:
     goarch:
       - amd64
 dockers:
- - binaries:
-     - {{cookiecutter.app_name}}
-   image_templates:
+ - image_templates:
      - "{{cookiecutter.app_registry}}/{{cookiecutter.app_namespace}}/{{cookiecutter.app_name}}:latest"
      - "{{cookiecutter.app_registry}}/{{cookiecutter.app_namespace}}/{{cookiecutter.app_name}}:{{ '{{' }} .Tag {{ '}}' }}"
    dockerfile: Dockerfile.golang
