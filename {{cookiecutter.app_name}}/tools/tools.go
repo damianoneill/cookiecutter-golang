@@ -1,6 +1,6 @@
 // +build tools
 
-package main
+package tools
 
 import (
 	_ "github.com/git-chglog/git-chglog/cmd/git-chglog"

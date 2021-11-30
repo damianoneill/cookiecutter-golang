@@ -15,7 +15,7 @@ GO := CGO_ENABLED=$(CGO_ENABLED) go
 GOPATH ?= $(shell $(GO) env GOPATH)
 GOFMT := $(GOBIN)/gofumpt -w
 GOMODULE := $(shell $(GO) list)
-GOTOOLS := $(shell cat tools.go | grep _ | awk -F'"' '{print $2}' | sed "s/.*\///" | sed -e 's/^"//' -e 's/"$$//' | awk '{print "$(GOBIN)/" $$0}')
+GOTOOLS := $(shell cat tools/tools.go | grep _ | awk -F'"' '{print $2}' | sed "s/.*\///" | sed -e 's/^"//' -e 's/"$$//' | awk '{print "$(GOBIN)/" $$0}')
 {% raw %} BINARY=$(shell go list -f '{{.Target}}') {% endraw %}
 
 # variables passed to binary
@@ -74,7 +74,7 @@ fmt-default: ## format the code
 .PHONY: mod-default
 mod-default: ## makes sure go.mod matches the source code in the module
 	@echo ">>> go mod tidy "
-	@$(GO) mod tidy
+	@$(GO) mod tidy && cd tools && $(GO) mod tidy
 
 .PHONY: archive-default
 archive-default: ## archive the third party dependencies, typically prior to generating a tagged release
@@ -96,7 +96,7 @@ tools-default: mod $(GOBIN)/golangci-lint $(GOBIN)/trivy $(GOTOOLS)
 
 $(GOTOOLS):
 	@echo ">>> install from tools.go "
-	@cat tools.go | grep _ | awk -F'"' '{print $$2}' | xargs -tI % sh -c 'GOBIN=$(GOBIN) $(GO) install %'
+	@cat tools/tools.go | grep _ | awk -F'"' '{print $$2}' | xargs -tI % sh -c 'cd tools && GOBIN=$(GOBIN) $(GO) install %'
 
 $(GOBIN)/golangci-lint:
 	@echo ">>> install golangci-lint "
