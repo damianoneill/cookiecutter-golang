@@ -43,4 +43,4 @@ jobs:
 
       - name: Build code 
         working-directory: ./go-project
-        run: make build
+        run: make tools build
