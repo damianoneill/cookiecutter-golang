@@ -1,0 +1,46 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  run:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.6, 3.7, 3.8]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup conda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          mamba-version: "*"
+          channels: conda-forge
+
+      - name: Conda install dependencies
+        shell: bash -l {0}
+        run: conda install python=${{ matrix.python-version }} cookiecutter
+
+      - name: Generate test project
+        shell: bash -l {0}
+        run: cookiecutter --no-input .
+
+      - name: Setup Golang
+        uses: actions/setup-go@v2
+        with:
+          go-version: '^1.16'
+
+      - name: Build code 
+        working-directory: ./go-project
+        run: make build
