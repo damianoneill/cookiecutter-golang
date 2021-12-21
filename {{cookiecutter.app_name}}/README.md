@@ -12,6 +12,7 @@ Usage:
 
 Targets:
   all-default           run the tools mod, generate, fmt, test, lint and install targets
+  clean-default         remove project artifacts e.g. tools directory
   release-default       generate release
   install-default       install the binary
   build-default         build the binary, ignoring vendored code if it exists
