@@ -43,7 +43,7 @@ jobs:
 
       - name: Build code
         working-directory: ./go-project
-        run: make tools build
+        run: make tools install
 
       - name: Test version
         shell: bash -l {0}
