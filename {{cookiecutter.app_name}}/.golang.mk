@@ -39,6 +39,12 @@ TRIVY_VERSION=$(shell wget -qO - "https://api.github.com/repos/aquasecurity/triv
 all-default: ## run the tools mod, generate, fmt, test, lint and install targets
 all-default: tools mod generate fmt test lint install
 
+.PHONY: clean-default
+clean-default: ## remove project artifacts e.g. tools directory
+clean-default:
+	@echo ">>> clean "
+	@rm -rf $(GOBIN)
+
 .PHONY: release-default
 release-default: ## generate release
 release-default: 
