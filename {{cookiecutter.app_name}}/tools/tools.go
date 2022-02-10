@@ -3,6 +3,7 @@
 package tools
 
 import (
+	_ "github.com/aquasecurity/trivy/cmd/trivy"
 	_ "github.com/git-chglog/git-chglog/cmd/git-chglog"
 	_ "github.com/google/addlicense"
 	_ "github.com/goreleaser/goreleaser"

@@ -30,8 +30,6 @@ LD_FLAGS := -s -w -X $(GOMODULE)/cmd.version=$(LD_VERSION) -X $(GOMODULE)/cmd.co
 
 # third party versions
 GOLANGCI_LINT_VERSION := v1.32.2
-TRIVY_VERSION=$(shell wget -qO - "https://api.github.com/repos/aquasecurity/trivy/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
-
 
 .DEFAULT_GOAL := all
 
@@ -98,7 +96,7 @@ generate-default: ## go generate code
 	@$(GO) generate ./...
 
 tools-default: ## install the project specific tools into $GOBIN
-tools-default: mod $(GOBIN)/golangci-lint $(GOBIN)/trivy $(GOTOOLS)
+tools-default: mod $(GOBIN)/golangci-lint $(GOTOOLS)
 
 $(GOTOOLS):
 	@echo ">>> install from tools.go "
@@ -107,17 +105,6 @@ $(GOTOOLS):
 $(GOBIN)/golangci-lint:
 	@echo ">>> install golangci-lint "
 	@curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(GOBIN) $(GOLANGCI_LINT_VERSION)
-
-$(GOBIN)/trivy:
-	@echo ">>> install trivy, be patient "
-	@mkdir -p $(GOPATH)/src/github.com/aquasecurity
-	@cd $(GOPATH)/src/github.com/aquasecurity ; \
-	rm -rf trivy ; \
-	git clone --depth 1 --branch v$(TRIVY_VERSION) https://github.com/aquasecurity/trivy 2>/dev/null; \
-	cd trivy/cmd/trivy/ ; \
-	export GO111MODULE=on ; \
-	GOBIN=$(GOBIN) $(GO) install ; \
-	cd $(ABS_CURRENT_DIR)
 
 .PHONY: runner-default
 runner-default: ## execute the gitlab runner using the configuration in .gitlab-ci.yml

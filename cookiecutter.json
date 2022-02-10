@@ -3,9 +3,9 @@
     "app_namespace": "acme",
     "app_name": "go-project",
     "app_registry": "github.com",
-    "golang_version": "1.16",
+    "golang_version": "1.17",
     "docker_base": "scratch",
     "copyright_holder": "acme ltd",
-    "copyright_year": "2021",
+    "copyright_year": "2022",
     "license_type": "apache"
 }
