@@ -17,6 +17,7 @@ GOFMT := $(GOBIN)/gofumpt -w
 GOMODULE := $(shell $(GO) list)
 GOTOOLS := $(shell cat tools/tools.go | grep _ | awk -F'"' '{print $2}' | sed "s/.*\///" | sed -e 's/^"//' -e 's/"$$//' | awk '{print "$(GOBIN)/" $$0}')
 {% raw %} BINARY=$(shell go list -f '{{.Target}}') {% endraw %}
+COMPAT = {{ cookiecutter.golang_version.split('.')[0] }}.{{ cookiecutter.golang_version.split('.')[1] }}
 
 # variables passed to binary
 LD_VERSION = x.x.x
@@ -78,7 +79,7 @@ fmt-default: ## format the code
 .PHONY: mod-default
 mod-default: ## makes sure go.mod matches the source code in the module
 	@echo ">>> go mod tidy "
-	@$(GO) mod tidy && cd tools && $(GO) mod tidy
+	@$(GO) mod tidy -compat=$(COMPAT) && cd tools && $(GO) mod tidy -compat=$(COMPAT)
 
 .PHONY: archive-default
 archive-default: ## archive the third party dependencies, typically prior to generating a tagged release
@@ -132,12 +133,6 @@ security-default: ## run go security check
 security-default:
 	@echo ">>> gosec "
 	@$(GOBIN)/gosec -conf .gosec.json ./...
-
-.PHONY: scanner-default
-scanner-default: ## run go vulnerability scanner
-scanner-default: install-default
-	@echo ">>> trivy "
-	$(GOBIN)/trivy fs --vuln-type library $(BINARY)
 
 .PHONY: outdated-default
 outdated-default: ## check for outdated direct dependencies

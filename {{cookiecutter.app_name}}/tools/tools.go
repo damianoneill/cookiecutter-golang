@@ -1,9 +1,9 @@
+//go:build tools
 // +build tools
 
 package tools
 
 import (
-	_ "github.com/aquasecurity/trivy/cmd/trivy"
 	_ "github.com/git-chglog/git-chglog/cmd/git-chglog"
 	_ "github.com/google/addlicense"
 	_ "github.com/goreleaser/goreleaser"
@@ -11,7 +11,7 @@ import (
 	_ "github.com/psampaz/go-mod-outdated"
 	_ "github.com/securego/gosec/cmd/gosec"
 	_ "github.com/segmentio/golines"
-	_ "github.com/spf13/cobra/cobra"
+	_ "github.com/spf13/cobra"
 	_ "github.com/uw-labs/lichen"
 	_ "mvdan.cc/gofumpt"
 )

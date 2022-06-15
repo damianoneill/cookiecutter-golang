@@ -41,7 +41,6 @@ Targets:
   licenses-default      print list of licenses for third party software used in binary
   add-license-default   add copyright license headers to go source code
   security-default      run go security check
-  scanner-default       run go vulnerability scanner
   outdated-default      check for outdated direct dependencies
   lines-default         shorten lines longer than 100 chars, ignore generated
   authors-default       update the AUTHORS file
