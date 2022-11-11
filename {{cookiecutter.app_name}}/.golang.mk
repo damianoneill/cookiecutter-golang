@@ -11,13 +11,12 @@ CURRENT_DIR := $(notdir $(patsubst %/,%,$(dir $(MAKEFILE_PATH))))
 GOBIN := $(CURDIR)/.go/bin
 export PATH := $(GOBIN):$(PATH)
 CGO_ENABLED ?= 0 # disabled, override as env variable
-GO := CGO_ENABLED=$(CGO_ENABLED) go
+GO := GOPROXY=$(GOPROXY) GONOPROXY=$(GONOPROXY) GONOSUMDB=$(GONOSUMDB) CGO_ENABLED=$(CGO_ENABLED) go
 GOPATH ?= $(shell $(GO) env GOPATH)
 GOFMT := $(GOBIN)/gofumpt -w
 GOMODULE := $(shell $(GO) list)
 GOTOOLS := $(shell cat tools/tools.go | grep _ | awk -F'"' '{print $2}' | sed "s/.*\///" | sed -e 's/^"//' -e 's/"$$//' | awk '{print "$(GOBIN)/" $$0}')
 {% raw %} BINARY=$(shell go list -f '{{.Target}}') {% endraw %}
-COMPAT = {{ cookiecutter.golang_version.split('.')[0] }}.{{ cookiecutter.golang_version.split('.')[1] }}
 
 # variables passed to binary
 LD_VERSION = x.x.x
@@ -30,25 +29,19 @@ LD_DATE := $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 LD_FLAGS := -s -w -X $(GOMODULE)/cmd.version=$(LD_VERSION) -X $(GOMODULE)/cmd.commit=$(LD_COMMIT) -X $(GOMODULE)/cmd.date=$(LD_DATE)
 
 # third party versions
-GOLANGCI_LINT_VERSION := v1.32.2
+GOLANGCI_LINT_VERSION := v1.49.0
 
 .DEFAULT_GOAL := all
 
 .PHONY: all-default
-all-default: ## run the tools mod, generate, fmt, test, lint and install targets
-all-default: tools mod generate fmt test lint install
+all-default: ## run the mod, generate, fmt, test, lint and install targets
+all-default: mod generate fmt test lint install
 
 .PHONY: clean-default
 clean-default: ## remove project artifacts e.g. tools directory
 clean-default:
 	@echo ">>> clean "
 	@rm -rf $(GOBIN)
-
-.PHONY: release-default
-release-default: ## generate release
-release-default: 
-	@echo ">>> goreleaser "
-	@$(GOBIN)/goreleaser release --rm-dist
 
 .PHONY: install-default
 install-default: ## install the binary
@@ -79,7 +72,7 @@ fmt-default: ## format the code
 .PHONY: mod-default
 mod-default: ## makes sure go.mod matches the source code in the module
 	@echo ">>> go mod tidy "
-	@$(GO) mod tidy -compat=$(COMPAT) && cd tools && $(GO) mod tidy -compat=$(COMPAT)
+	@$(GO) mod tidy && cd tools && $(GO) mod tidy
 
 .PHONY: archive-default
 archive-default: ## archive the third party dependencies, typically prior to generating a tagged release
@@ -101,7 +94,7 @@ tools-default: mod $(GOBIN)/golangci-lint $(GOTOOLS)
 
 $(GOTOOLS):
 	@echo ">>> install from tools.go "
-	@cat tools/tools.go | grep _ | awk -F'"' '{print $$2}' | xargs -tI % sh -c 'cd tools && GOBIN=$(GOBIN) $(GO) install %'
+	@GOPROXY=$(GOPROXY) GONOPROXY=$(GONOPROXY) GONOSUMDB=$(GONOSUMDB) CGO_ENABLED=$(CGO_ENABLED) cat tools/tools.go | grep _ | awk -F'"' '{print $$2}' | xargs -tI % sh -c 'cd tools && GOBIN=$(GOBIN) $(GO) install %'
 
 $(GOBIN)/golangci-lint:
 	@echo ">>> install golangci-lint "
@@ -111,10 +104,11 @@ $(GOBIN)/golangci-lint:
 runner-default: ## execute the gitlab runner using the configuration in .gitlab-ci.yml
 	gitlab-runner exec docker --cache-dir /cache --docker-volumes 'cache:/cache' test
 
-.PHONY: snapshot-default
-snapshot-default: ## generate a snapshot release using goreleaser
-	@echo ">>> goreleaser "
-	@$(GOBIN)/goreleaser --snapshot --rm-dist
+.PHONY: all
+image-default: ## build the docker image
+image-default: 
+	@echo ">>> build docker image"
+	@docker build -t $(GOMODULE):latest .
 
 .PHONY: licenses-default
 licenses-default: ## print list of licenses for third party software used in binary
@@ -138,7 +132,7 @@ security-default:
 outdated-default: ## check for outdated direct dependencies
 outdated-default:
 	@echo ">>> go-mod-outdated "
-	@$(GO) list -u -m -json all | go-mod-outdated -direct
+	@$(GO) list -u -m -json all | $(GOBIN)/go-mod-outdated -direct
 
 .PHONY: lines-default
 lines-default: ## shorten lines longer than 100 chars, ignore generated

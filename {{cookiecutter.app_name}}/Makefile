@@ -1,5 +1,6 @@
 # REQUIRED SECTION
-include ./.golang.mk
+include $(PWD)/.env.sh
+include $(PWD)/.golang.mk
 # END OF REQUIRED SECTION
 
 # Run 'make help' for the list of default targets
@@ -9,5 +10,5 @@ include ./.golang.mk
 #	go test -mod vendor -v -cover ./... -coverprofile cover.out
 
 # Threshold increased from default
-coverage: test
-	goverreport -coverprofile=cover.out -sort=block -order=desc -threshold=95
+# coverage: test
+# 	$(GOBIN)/goverreport -coverprofile=cover.out -sort=block -order=desc -threshold=95

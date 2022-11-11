@@ -12,7 +12,6 @@ Powered by [Cookiecutter](https://github.com/audreyr/cookiecutter)
     - cobra/viper based mainline
         - cobra completion command
         - cobra version command
-    - goreleaser config
     - gitlab-ci config
 
 See below for the available targets of the makefile
@@ -24,8 +23,8 @@ Usage:
   make <target> ignore suffix -default e.g. make install
 
 Targets:
-  all-default           run the tools mod, generate, fmt, test, lint and install targets
-  release-default       generate release
+  all-default           run the mod, generate, fmt, test, lint and install targets
+  clean-default         remove project artifacts e.g. tools directory
   install-default       install the binary
   build-default         build the binary, ignoring vendored code if it exists
   test-default          run test with coverage
@@ -37,7 +36,7 @@ Targets:
   generate-default      go generate code
   tools-default         install the project specific tools into $GOBIN
   runner-default        execute the gitlab runner using the configuration in .gitlab-ci.yml
-  snapshot-default      generate a snapshot release using goreleaser
+  image-default         build the docker image
   licenses-default      print list of licenses for third party software used in binary
   add-license-default   add copyright license headers to go source code
   security-default      run go security check

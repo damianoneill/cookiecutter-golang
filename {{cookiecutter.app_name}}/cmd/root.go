@@ -36,7 +36,7 @@ func Execute() {
 	}
 }
 
-func init() { // nolint:gochecknoinits
+func init() { //nolint:gochecknoinits
 	cobra.OnInitialize(initConfig)
 
 	// Here you will define your flags and configuration settings.
