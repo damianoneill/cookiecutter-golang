@@ -12,3 +12,8 @@ include $(PWD)/.golang.mk
 # Threshold increased from default
 # coverage: test
 # 	$(GOBIN)/goverreport -coverprofile=cover.out -sort=block -order=desc -threshold=95
+
+image: ## build the docker image with amd64 support
+image:
+	@echo ">>> build docker image"
+	@DOCKER_DEFAULT_PLATFORM=linux/amd64 docker build -t $(GOMODULE):latest .
