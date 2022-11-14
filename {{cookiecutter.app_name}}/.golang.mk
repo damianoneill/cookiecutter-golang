@@ -31,7 +31,7 @@ LD_FLAGS := -s -w -X $(GOMODULE)/cmd.version=$(LD_VERSION) -X $(GOMODULE)/cmd.co
 # third party versions
 GOLANGCI_LINT_VERSION := v1.49.0
 
-.DEFAULT_GOAL := all
+.DEFAULT_GOAL := all-default
 
 .PHONY: all-default
 all-default: ## run the mod, generate, fmt, test, lint and install targets
@@ -94,7 +94,7 @@ tools-default: mod $(GOBIN)/golangci-lint $(GOTOOLS)
 
 $(GOTOOLS):
 	@echo ">>> install from tools.go "
-	@GOPROXY=$(GOPROXY) GONOPROXY=$(GONOPROXY) GONOSUMDB=$(GONOSUMDB) CGO_ENABLED=$(CGO_ENABLED) cat tools/tools.go | grep _ | awk -F'"' '{print $$2}' | xargs -tI % sh -c 'cd tools && GOBIN=$(GOBIN) $(GO) install %'
+	@GOPROXY=$(GOPROXY) GONOPROXY=$(GONOPROXY) GONOSUMDB=$(GONOSUMDB) CGO_ENABLED=$(CGO_ENABLED) cat tools/tools.go | grep _ | awk -F'"' '{print $$2}' | xargs -tI % sh -c 'cd tools && GOBIN=$(GOBIN) go install %'
 
 $(GOBIN)/golangci-lint:
 	@echo ">>> install golangci-lint "
