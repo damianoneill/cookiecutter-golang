@@ -11,7 +11,7 @@ test:
   image: golang:{{cookiecutter.golang_version}}
   extends: .go-cache
   before_script:
-    - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.32.2
+    - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin {{cookiecutter.golang_ci_version}}
     - make tools
     - export PATH=$(go env GOPATH)/bin:$PATH
   script:

@@ -7,5 +7,6 @@
     "docker_base": "scratch",
     "copyright_holder": "acme ltd",
     "copyright_year": "2022",
-    "license_type": "apache"
+    "license_type": "apache",
+    "golang_ci_version": "v1.49.0"
 }
