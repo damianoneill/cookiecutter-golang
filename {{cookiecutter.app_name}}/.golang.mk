@@ -100,10 +100,6 @@ $(GOBIN)/golangci-lint:
 	@echo ">>> install golangci-lint "
 	@curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(GOBIN) $(GOLANGCI_LINT_VERSION)
 
-.PHONY: runner-default
-runner-default: ## execute the gitlab runner using the configuration in .gitlab-ci.yml
-	gitlab-runner exec docker --cache-dir /cache --docker-volumes 'cache:/cache' test
-
 .PHONY: all
 image-default: ## build the docker image
 image-default: 

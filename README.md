@@ -35,7 +35,6 @@ Targets:
   lint-default          run golangci-lint using the configuration in .golangci.yml
   generate-default      go generate code
   tools-default         install the project specific tools into $GOBIN
-  runner-default        execute the gitlab runner using the configuration in .gitlab-ci.yml
   image-default         build the docker image
   licenses-default      print list of licenses for third party software used in binary
   add-license-default   add copyright license headers to go source code
